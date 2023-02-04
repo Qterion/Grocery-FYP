@@ -1,0 +1,3 @@
+What we are scraping?: Sainsburys and Iceland
+
+Why?: because ASDA is hard to scrape and Tesco blocks the requests that are made from BeautifulSoup
