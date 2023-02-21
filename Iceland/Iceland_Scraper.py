@@ -16,20 +16,24 @@ def scrape_page(url):
     return doc
 
 def create_file():
-    with open("iceland.csv","w", newline='') as csvfile:
+    with open("iceland.csv","w", newline='', encoding="utf-8") as csvfile:
         writer=csv.writer(csvfile)
     return writer
         
 def write_line(item_to_add):
-    with open("iceland.csv","a", newline='') as csvfile:
+    with open("iceland.csv","a", newline='',  encoding="utf-8") as csvfile:
         writer=csv.writer(csvfile)
         writer.writerow([item_to_add['title'],item_to_add['price'],item_to_add['tags'],item_to_add['ingerdients'],item_to_add['image'],item_to_add['link']])
-def get_Aldi_Items():
-    urls={["https://www.iceland.co.uk/fresh","fresh"],["https://www.iceland.co.uk/bakery","bakery"],["https://www.iceland.co.uk/frozen","frozen"],}
-    tags=["fresh","bakery","frozen"]
+def get_Iceland_Items():
+    urls=[["https://www.iceland.co.uk/fresh","fresh"],
+    ["https://www.iceland.co.uk/bakery","bakery"],
+    ["https://www.iceland.co.uk/frozen","frozen"],
+    ["https://www.iceland.co.uk/drinks","drinks"]]
+    # Also need to add chocolate sections and other stuff
+    # cuz why not?
+    create_file()
     for links in urls:
         url=links[0]
-        create_file()
         while True:
             doc=scrape_page(url)
             results= doc.find_all(class_="name-link")
@@ -37,16 +41,22 @@ def get_Aldi_Items():
                 item={}
                 item['title']=simplify(results[i])
                 item['link']=results[i]['href']
+                
                 time.sleep(20)
                 item_doc=scrape_page(results[i]['href'])
                 nutrition=item_doc.find(class_="product-right-col-inner")
                 item_image=item_doc.find(class_="product-image main-image image-to-zoom")
-                opener = urllib.request.URLopener()
-                opener.addheader('User-Agent', 'whatever')
-                a=urlparse(item_image['href'])
-                item['image']=os.path.basename(a.path)
-                time.sleep(5)
-                opener.retrieve(item_image['href'],"Images/Iceland/"+item['image'])
+                
+                
+                if item_image!=None:
+                    opener = urllib.request.URLopener()
+                    opener.addheader('User-Agent', 'whatever')
+                    a=urlparse(item_image['href'])
+                    item['image']=os.path.basename(a.path)
+                    time.sleep(5)
+                    opener.retrieve(item_image['href'],"Images/Iceland/"+item['image'])
+                else:
+                    item['image']=""
                 price=item_doc.find(class_="product-sales-price").get_text().strip()
                 item['price']=price[1:]
                 
@@ -56,7 +66,7 @@ def get_Aldi_Items():
                     item['ingerdients']=ingredients
                 except:
                     item['ingerdients']=""
-                    item['tags']=links[1]
+                item['tags']=links[1]
                 write_line(item)
             next_page=doc.find(class_="page-link page-next")
             try:
@@ -65,5 +75,13 @@ def get_Aldi_Items():
             except:
                 break
             time.sleep(20)
+    print("Iceland Scraped!")
 
-get_Aldi_Items()
+get_Iceland_Items()
+
+    
+
+
+
+
+

@@ -29,6 +29,8 @@ def get_Iceland_Items():
     ["https://www.iceland.co.uk/bakery","bakery"],
     ["https://www.iceland.co.uk/frozen","frozen"],
     ["https://www.iceland.co.uk/drinks","drinks"]]
+    # Also need to add chocolate sections and other stuff
+    # cuz why not?
     tags=["fresh","bakery","frozen"]
     for links in urls:
         url=links[0]
