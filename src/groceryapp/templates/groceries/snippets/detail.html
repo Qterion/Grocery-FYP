@@ -1,0 +1,91 @@
+
+{% load static%}
+{%load get_dict_val%}
+{% with my_scores|get_dict_val:object.id as personal_score%}
+<div class="card">
+  <img class="bd-placeholder-img card-img-top" height="70%" src="http://127.0.0.1:8000/groceries/media/images/{{object.picture_filename}}" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>{{object.title}}</title></img>
+
+  <div class="card-body">
+      <h3>{{object.title}}</h3>
+      <h5>£{{object.price}}</h5>
+      {%if object.retailer == "aldi"%}
+      <img class="bd-placeholder-img card-img" width="5px" height="20px" style="padding-right:270px" src="http://127.0.0.1:8000/groceries/media/aldi_logo.png" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"></img>
+      {%else%}
+      <img class="bd-placeholder-img card-img" width="5px" height="18px" style="padding-right:275px" src="http://127.0.0.1:8000/groceries/media/iceland_logo.png" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"></img>
+      {%endif%}
+      <p class="card-text">   |   {{object.category}} | {%if user.gluten_trigger == False and user.lactose_trigger == False and user.nut_trigger == False%}
+      
+    {%endif%}
+    {%if object.gluten_free is None%}
+    <label class="text-bg-primary border rounded bg-warning">No data</label>
+    {% else%}
+      {%if user.gluten_trigger == True and user.lactose_trigger == True and user.nut_trigger == True%}
+        {% if object.gluten_free == user.gluten_trigger and object.lactose_free == user.lactose_trigger and object.nut_free == user.nut_trigger%}
+        <label class="text-bg-primary border rounded bg-success">compatible</label>
+        {%else%}
+        <label class="text-bg-primary border rounded bg-danger">not_compatible</label>
+          
+        {%endif%}
+        {%else%}
+        {% if user.gluten_trigger == True and user.lactose_trigger == True%}
+          {%if object.gluten_free == True and object.lactose_free == True%}
+          <label class="text-bg-primary border rounded bg-success">compatible</label>
+          {%else%}
+          <label class="text-bg-primary border rounded bg-danger">not_compatible</label>
+          {%endif%}
+        {%elif user.lactose_trigger == True and user.nut_trigger == True%}
+          {%if object.lactose_free == True and object.nut_free == True %}
+          <label class="text-bg-primary border rounded bg-success">compatible</label>
+          {%else%}
+          <label class="text-bg-primary border rounded bg-danger">not_compatible</label>
+          {%endif%}
+        {%elif user.gluten_trigger == True and user.nut_trigger == True%}
+          {%if object.gluten_free == True and object.nut_free == True %}
+          <label class="text-bg-primary border rounded bg-success">compatible</label>
+          {%else%}
+          <label class="text-bg-primary border rounded bg-danger">not_compatible</label>
+          {%endif%}
+        {%elif user.gluten_trigger == True%}
+          {%if object.gluten_free == True%}
+          <label class="text-bg-primary border rounded bg-success">compatible</label>
+          {%else%}
+          <label class="text-bg-primary border rounded bg-danger">not_compatible</label>
+          {%endif%}
+        {%elif user.lactose_trigger == True%}
+          {%if object.lactose_free == True%}
+          <label class="text-bg-primary border rounded bg-success">compatible</label>
+          {%else%}
+          <label class="text-bg-primary border rounded bg-danger">not_compatible</label>
+          {%endif%}
+        {%elif user.nut_trigger == True%}
+          {%if object.nut_free == True %}
+          <label class="text-bg-primary border rounded bg-success">compatible</label>
+          {%else%}
+          <label class="text-bg-primary border rounded bg-danger">not_compatible</label>
+          {%endif%}
+        
+        {%endif%}
+      {%endif%}
+    {%endif%}</p>
+      
+    
+
+
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="btn-group">
+        
+        <a href="{{object.link}}" class="btn btn-primary">Item Link</a>
+        {%include 'scores/snippets/score_choice.html' with object_id=object.id personal_score=personal_score%}
+      </div>
+      {%if object.average_score is not None%}
+      <small class="text-muted" style="font-weight: bold">Rating: {{object.average_score}}/5   ({{object.score_count}})</small>
+  {%else%}
+  <small class="text-muted" style="font-weight: bold">Rating: 0/5   ({{object.score_count}})</small>
+      {%endif%}
+    </div>
+      
+  </div>
+  
+  </div>
+  
+  {%endwith%}

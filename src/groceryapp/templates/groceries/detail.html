@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{%block content%}
+
+<div class="row my-2">
+  <div class="col-4">
+    
+    {% include 'groceries/snippets/detail.html' with object=object%}
+    
+  </div>
+
+  <div class="col-4">
+    <div class="card">
+    <h3>Product Ingredients:</h3>
+    <p>{{object.ingredients}}</p>
+    </div>
+    {%if object.similar%}
+<h4>This item is also available at {%if object.retailer == "aldi" %} Iceland {%else%} Aldi {%endif%}</h4>
+{%endif%}
+<div class='col-6'>
+      
+  {%if similar_object != None %}
+  {%include 'groceries/snippets/small.html' with object=similar_object%}
+  {%endif%}
+  </div>
+    
+  </div>
+  
+</div>
+{% endblock %}

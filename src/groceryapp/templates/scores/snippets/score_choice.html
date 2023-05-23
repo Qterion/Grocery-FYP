@@ -1,0 +1,16 @@
+<form hx-post="/score/grocery/" hx-trigger="change" hx-target="find .success"> 
+    
+    <div class="success"></div>
+    
+    <input type="hidden" value="{{object_id}}" name="object_id"/>
+    
+<select class="form-select"  name="score_value" lass="fomr-control">
+    {%for decision in score_decisions%}
+    {%if decision is None%}
+    <option disabled {%if personal_score == None%} selected {%endif%}>Give Score</option>
+    {%else%}
+    <option value="{{decision}}" {%if personal_score == decision%} selected {%endif%} >{{decision}}</option>
+    {%endif%}
+    {%endfor%}
+</select>
+</form>

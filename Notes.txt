@@ -1,4 +1,0 @@
-What we are scraping?: Sainsburys and Iceland
-
-Why?: because ASDA is hard to scrape and Tesco blocks the requests that are made from BeautifulSoup
-Tesco issue solved but there is now another issue: Tesco has too many items and it would take too much time to scrape everything
